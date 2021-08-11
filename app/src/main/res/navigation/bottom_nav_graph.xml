@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.triviaquiz.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/home_fragment" />
+    <fragment
+        android:id="@+id/challengesFragment"
+        android:name="com.example.triviaquiz.ChallengesFragment"
+        android:label="Challenges"
+        tools:layout="@layout/challenges_fragment" />
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.example.triviaquiz.StatsFragment"
+        android:label="Statistics"
+        tools:layout="@layout/stats_fragment" />
+</navigation>
