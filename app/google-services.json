@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "111200559436",
+    "firebase_url": "https://trivianew-e265c-default-rtdb.firebaseio.com",
+    "project_id": "trivianew-e265c",
+    "storage_bucket": "trivianew-e265c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111200559436:android:c59349733e0cdb75ceafe9",
+        "android_client_info": {
+          "package_name": "com.example.triviaquiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111200559436-5j9f82il3igruigj5028qst5ngshksfh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpSWkYYabag72nqYZKIXC0_kA8Bq_yH0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111200559436-5j9f82il3igruigj5028qst5ngshksfh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
