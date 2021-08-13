@@ -28,10 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class HomeFragment extends Fragment {
 
-    private FirebaseAuth mAuth;
-   private FirebaseAuth.AuthStateListener mAuthListener;
-    private TextView txt;
-    private Button btnSignout;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -79,31 +76,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.home_fragment, container, false);
 
-        txt=(TextView) view.findViewById(R.id.textView);
-        //intialize firebase
-        mAuth = FirebaseAuth.getInstance();
-        btnSignout=(Button) view.findViewById(R.id.btnSignout);
 
-        mAuthListener=new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user=firebaseAuth.getCurrentUser();
-                if(user!=null){
-                    Toast.makeText(getContext(),"onAuthStateChanged:signed_in: "+user.getEmail(),Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toast.makeText(getContext(),"On auth statechanged:signed out: ",Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-        btnSignout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signOut();
-                Intent signout=new Intent(getActivity(),SplashActivity.class);
-                startActivity(signout);
-            }
-        });
 
         Button btnPlay = (Button)view.findViewById(R.id.btnPlay);
         btnPlay.setOnClickListener(new View.OnClickListener() {
@@ -126,38 +99,13 @@ public class HomeFragment extends Fragment {
             }
         });
         return view;
-
-
-
     }
 
-    //firebase current user
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-    @Override
-    public void onStop(){
-        super.onStop();
-        if(mAuthListener!=null){
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-    private void updateUI(FirebaseUser currentUser) {
-        //print current user
-        txt.setText(currentUser.getEmail());
-
-    }
-
-//   @Override
+//    @Override
 //    public  void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
 //        super.onCreateOptionsMenu(menu,menuInflater);
 //
-//   }
+//    }
 
 
 }

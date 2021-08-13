@@ -138,12 +138,15 @@ public class SignupActivity extends AppCompatActivity {
                                     User usr = new User(name1, email1, phone1);
                                     FirebaseDatabase.getInstance().getReference("Users")
                                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+
                                             .setValue(usr).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(SignupActivity.this, "User has been successfully registered", Toast.LENGTH_LONG).show();
                                                 progressBar.setVisibility(View.GONE);
+                                                Intent todashboard=new Intent(getApplicationContext(),DashboardActivity.class);
+                                                startActivity(todashboard);
                                             } else {
                                                 Toast.makeText(SignupActivity.this, "User failed to register", Toast.LENGTH_LONG).show();
                                                 progressBar.setVisibility(View.GONE);

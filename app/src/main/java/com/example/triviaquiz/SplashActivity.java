@@ -40,11 +40,12 @@ public class SplashActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         getSupportActionBar().hide();
-
+            //progress bar
         progressBar=(ProgressBar) findViewById(R.id.progressBarSignup);
         progressBar.setVisibility(View.GONE);
-        //initialize mauth
+        //initialize firebase
         mAuth=FirebaseAuth.getInstance();
+
        final EditText email=(EditText) findViewById(R.id.etEmail);
        final EditText password=(EditText) findViewById(R.id.txtPassword);
 
@@ -52,10 +53,7 @@ public class SplashActivity extends AppCompatActivity {
         txtSignUp.setMovementMethod(LinkMovementMethod.getInstance());
         txtSignUp.setLinkTextColor(Color.BLUE);
 
-
-
-      //  Log.i("chek",emailstr+" "+passwordStr);
-
+        //signup text click listener
         txtSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,12 +67,14 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
+        //sign in button click listener
+
         Button btnSignIn = (Button)findViewById(R.id.btnSignIn);
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
+                //validations for sign in fields
                 if(email.getText().toString().isEmpty()){
                     isvalid=false;
                     email.setError("Required");
@@ -99,7 +99,7 @@ public class SplashActivity extends AppCompatActivity {
                 else{
                     isvalid=true;
                 }
-
+                // sign in with email if fields are valid
                 if(isvalid) {
                     progressBar.setVisibility(View.VISIBLE);
                     mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
