@@ -7,10 +7,27 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string-array name="level">
-        <item>Any</item>
-        <item>Easy</item>
-        <item>Medium</item>
-        <item>Hard</item>
-        <item>Difficult</item>
+
+        <item>easy</item>
+        <item>medium</item>
+        <item>hard</item>
     </string-array>
+
+    <string-array name="category">
+        <item>Any</item>
+        <item>General Knowledge</item>
+        <item>Entertainment: Books</item>
+        <item>Entertainment: Board Games</item>
+        <item>Science and Nature</item>
+        <item>Science :Computers</item>
+        <item>Science : Math</item>
+        <item>Sports</item>
+        <item>Geography</item>
+        <item>History</item>
+        <item>Animals</item>
+        <item>Vehicles</item>
+
+    </string-array>
+
+
 </resources>

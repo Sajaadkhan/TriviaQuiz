@@ -8,13 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class HomeFragment extends Fragment {
 
-
+    String level,category="";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,7 +79,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.home_fragment, container, false);
 
-
+//https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple
 
         Button btnPlay = (Button)view.findViewById(R.id.btnPlay);
         btnPlay.setOnClickListener(new View.OnClickListener() {
@@ -88,11 +91,46 @@ public class HomeFragment extends Fragment {
 
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+                Spinner spinnerCategory = (Spinner) dialog.findViewById(R.id.spinnerCategory);
+                Spinner spinnerLevel = (Spinner) dialog.findViewById(R.id.spinnerLevel);
+
+
+                spinnerLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        level = parent.getItemAtPosition(position).toString();
+                        //Log.e("level", "onItemSelected: "+position );
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                            level="easy";
+                    }
+                });
+
+                String categoryNumber[] = new String[]{"","9","10","16","17","18","19","21","22","23","27","28"};
+                spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                       // Log.e("position" ,"dsfa"+position );
+                        category = categoryNumber[position];
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                            category="";
+                    }
+                });
+
+
                 Button btnStart = (Button)dialog.findViewById(R.id.btnStartQuiz);
                 btnStart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent quizIntent = new Intent(HomeFragment.this.getContext(), QuizActivity.class);
+                        quizIntent.putExtra("Level",level);
+                        quizIntent.putExtra("Category", category);
                         startActivity(quizIntent);
                     }
                 });
@@ -100,12 +138,5 @@ public class HomeFragment extends Fragment {
         });
         return view;
     }
-
-//    @Override
-//    public  void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
-//        super.onCreateOptionsMenu(menu,menuInflater);
-//
-//    }
-
 
 }
