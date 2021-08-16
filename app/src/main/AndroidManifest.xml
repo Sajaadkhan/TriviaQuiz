@@ -11,9 +11,6 @@
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.TriviaQuiz">
-        <activity
-            android:name=".profile"
-            android:exported="true" />
         <activity android:name=".QuizActivity" />
         <activity android:name=".DashboardActivity" />
         <activity android:name=".SignupActivity" />

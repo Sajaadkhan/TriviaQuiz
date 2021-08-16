@@ -40,31 +40,4 @@ public class DashboardActivity extends AppCompatActivity {
 
 
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater =getMenuInflater();
-        inflater.inflate(R.menu.profile_menu,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-    //cart button on the display activity accessed usign the following function
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                //intent here
-            Intent toprofile =new Intent(getApplicationContext(),profile.class);
-                startActivity(toprofile);
-
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-
-    }
-
-
-
-
 }

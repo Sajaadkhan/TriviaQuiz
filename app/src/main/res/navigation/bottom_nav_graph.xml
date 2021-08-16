@@ -12,12 +12,12 @@
         tools:layout="@layout/home_fragment" />
     <fragment
         android:id="@+id/challengesFragment"
-        android:name="com.example.triviaquiz.ChallengesFragment"
-        android:label="Challenges"
+        android:name="com.example.triviaquiz.StatsFragment"
+        android:label="Statistics"
         tools:layout="@layout/challenges_fragment" />
     <fragment
         android:id="@+id/statsFragment"
-        android:name="com.example.triviaquiz.StatsFragment"
-        android:label="Statistics"
+        android:name="com.example.triviaquiz.ChallengesFragment"
+        android:label="Profile"
         tools:layout="@layout/stats_fragment" />
 </navigation>

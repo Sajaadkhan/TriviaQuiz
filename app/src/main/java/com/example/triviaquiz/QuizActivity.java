@@ -1,5 +1,6 @@
 package com.example.triviaquiz;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,8 +12,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,20 +48,23 @@ public class QuizActivity extends AppCompatActivity {
 
     private TextView questionTV,questionNumberTV;
     private Button optionBtn,optionBtn2,optionBtn3,optionBtn4;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    public String profilename;
 
     Random random;
 
     int currentScore=0,questionAttemted=1,currentPos;
     public ArrayList<Model.results> data;
     public ArrayList<String> options;
-    String level,category;
+    String level,category,categoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-
+        mAuth = FirebaseAuth.getInstance();
         questionTV=findViewById(R.id.idTVQuestion);
         questionNumberTV=findViewById(R.id.idTVQuestionAttemted);
         optionBtn=findViewById(R.id.idBtnOption);
@@ -61,9 +72,27 @@ public class QuizActivity extends AppCompatActivity {
         optionBtn3=findViewById(R.id.idBtnOption3);
         optionBtn4=findViewById(R.id.idBtnOption4);
 
+        //firebase
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener=new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user=firebaseAuth.getCurrentUser();
+                if(user!=null){
+                    //Toast.makeText(getApplicationContext(),"onAuthStateChanged:signed_in: "+user.getEmail(),Toast.LENGTH_LONG).show();
+                }
+                else{
+                    //Toast.makeText(getApplicationContext(),"On auth statechanged:signed out: ",Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+
+        //getting  data from intent
         Intent homeIntent = getIntent();
         level = homeIntent.getStringExtra("Level");
         category = homeIntent.getStringExtra("Category");
+        categoryName=homeIntent.getStringExtra("categoryName");
 
             //calling Methods interface to requst api data
         //api.php?amount=10&category=18&difficulty=easy&type=multiple
@@ -88,6 +117,25 @@ public class QuizActivity extends AppCompatActivity {
                 Log.e("TAG", "onFailure: "+t.getMessage());
             }
         });
+
+        //get current user name
+
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    profilename= (String) task.getResult().child("name").getValue();
+
+
+                }
+            }
+        });
+
 
 
         //option click listeners
@@ -146,6 +194,8 @@ public class QuizActivity extends AppCompatActivity {
 
 
     }
+
+
 //score board using BottomsheetDialog
     private void showScoreDialog(){
         BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(QuizActivity.this);
@@ -154,6 +204,8 @@ public class QuizActivity extends AppCompatActivity {
         Button restartQuiz=bottomsheetview.findViewById(R.id.idRestart);
         Button home=bottomsheetview.findViewById(R.id.gotohome);
         scoreTv.setText("Your score is \n" +currentScore + "/10");
+
+
         //restart quiz button
         restartQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +247,23 @@ public class QuizActivity extends AppCompatActivity {
 
         questionNumberTV.setText("Questions Attempted: "+questionAttemted+"/10");
         if(questionAttemted==10){
-            showScoreDialog();
+
+
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            QuizScore quizScore = new QuizScore(profilename, categoryName, level, currentScore);
+            FirebaseDatabase.getInstance().getReference("QuizScore")
+                    .child(profilename)
+                    .child(categoryName)
+                    .setValue(quizScore).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        showScoreDialog();
+                    } else {
+                        Toast.makeText(QuizActivity.this, "Something went wrong!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
         }
         else{  //using Jsoup to remove html encoding in the response data
            try {
@@ -205,6 +273,21 @@ public class QuizActivity extends AppCompatActivity {
                optionBtn3.setText(Jsoup.parse(options.get(2)).text());
                optionBtn4.setText(Jsoup.parse(options.get(3)).text());
            }catch (Exception e){e.getMessage();}
+        }
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+    }
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(mAuthListener!=null){
+            mAuth.removeAuthStateListener(mAuthListener);
         }
     }
 

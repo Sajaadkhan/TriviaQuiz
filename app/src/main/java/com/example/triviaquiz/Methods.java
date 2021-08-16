@@ -15,6 +15,6 @@ import retrofit2.http.Url;
 public interface Methods {
 
     @GET("api.php?amount=10&type=multiple")
-    Call<Model> getAllData(@Query("difficulty")
-            String level,@Query("category") String category);
+    Call<Model> getAllData(@Query("difficulty") String level,
+                           @Query("category") String category);
 }
